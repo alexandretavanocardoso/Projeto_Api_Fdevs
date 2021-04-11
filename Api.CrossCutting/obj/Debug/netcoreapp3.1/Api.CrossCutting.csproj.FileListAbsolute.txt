@@ -1,0 +1,48 @@
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.deps.json
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.dll
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.pdb
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csprojAssemblyReference.cache
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.AssemblyInfoInputs.cache
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.AssemblyInfo.cs
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csproj.CoreCompileInputs.cache
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.dll
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.pdb
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Data.dll
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Domain.dll
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Service.dll
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Data.pdb
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Domain.pdb
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Service.pdb
+C:\Users\rodri\OneDrive\Estudos\Aulas FDevs\Projeto\API\Api.Application\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csproj.CopyComplete
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.deps.json
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.dll
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.pdb
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Data.dll
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Domain.dll
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Service.dll
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Data.pdb
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Domain.pdb
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Service.pdb
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csprojAssemblyReference.cache
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.AssemblyInfoInputs.cache
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.AssemblyInfo.cs
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csproj.CoreCompileInputs.cache
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csproj.CopyComplete
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.dll
+D:\UPPERCASE\GIT\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.pdb
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.deps.json
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.dll
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.CrossCutting.pdb
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Data.dll
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Domain.dll
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Service.dll
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Data.pdb
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Domain.pdb
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\bin\Debug\netcoreapp3.1\Api.Service.pdb
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csprojAssemblyReference.cache
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.AssemblyInfoInputs.cache
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.AssemblyInfo.cs
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csproj.CoreCompileInputs.cache
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.csproj.CopyComplete
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.dll
+D:\Projetos\GIT\FDevs\FDevs_API\Api.CrossCutting\obj\Debug\netcoreapp3.1\Api.CrossCutting.pdb
