@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alexandre.tavano\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj": {}
+    "C:\\Users\\usuario\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alexandre.tavano\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj": {
+    "C:\\Users\\usuario\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alexandre.tavano\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj",
+        "projectUniqueName": "C:\\Users\\usuario\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj",
         "projectName": "FdevzQuiz",
-        "projectPath": "C:\\Users\\alexandre.tavano\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj",
-        "packagesPath": "C:\\Users\\alexandre.tavano\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alexandre.tavano\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\obj\\",
+        "projectPath": "C:\\Users\\usuario\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz.csproj",
+        "packagesPath": "C:\\Users\\usuario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\usuario\\Desktop\\FdevzQuiz\\FdevzQuiz\\FdevzQuiz\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\alexandre.tavano\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -69,7 +67,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
