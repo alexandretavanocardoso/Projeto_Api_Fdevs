@@ -1,6 +1,8 @@
-﻿namespace FdevzQuiz.Models
+﻿using FdevzQuiz.Models;
+
+namespace FdevzQuiz.Command
 {
-    public class QuizModel
+    public class QuizCommand
     {
         public int CodigoQuiz { get; set; }
         public string Titulo { get; set; }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FdevzQuiz.Models
+﻿namespace FdevzQuiz.Models
 {
     public class AlternativasModel
     {
-        public int MyProperty { get; set; }
-        public int MyProperty { get; set; }
+        public int CodigoAlternativa { get; set; }
+        public int CodigoQuiz { get; set; }
+        public int CodigoPergunta { get; set; }
+        public string Titulo { get; set; }
+        public bool Correta { get; set; }
     }
 }
