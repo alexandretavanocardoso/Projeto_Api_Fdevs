@@ -24,13 +24,15 @@ namespace FdevzQuiz.Controllers
             }).Result;
         }
 
-        private async Task SalvarDados(ICollection<QuizModel> dados)
+        private async Task<ICollection<T>> SalvarDados<T>(ICollection<T> dados)
         {
             using var createStream = System.IO.File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Quiz.json"));
             await JsonSerializer.SerializeAsync(createStream, dados, new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
+
+            return dados;
         }
 
         [HttpGet("recuperarQuiz")]
@@ -41,25 +43,33 @@ namespace FdevzQuiz.Controllers
         }
 
         [HttpPost("adicionarQuiz")]
-        public async Task<ActionResult<QuizModel>> AdicionarQuiz([FromBody] QuizCommand quizCommand)
+        public async Task<ActionResult<QuizModel>> AdicionarQuiz([FromBody] QuizCommand quizCommand, [FromBody] PerguntasCommand perguntasCommand, [FromBody] AlternativasCommand alternativasCommand)
         {
             if (!ModelState.IsValid)
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
 
             if (quizCommand == null)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-            if (quizCommand.Perguntas.Alternativas.ToString().Length > 5)
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas são 4!");
+            foreach (var item in quizCommand.Perguntas)
+            {
+                if (item.Alternativas.Count > 4)
+                    return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-            if (!string.IsNullOrEmpty(quizCommand.Titulo) ||
-                !string.IsNullOrEmpty(quizCommand.Perguntas.Titulo) ||
-                !string.IsNullOrEmpty(quizCommand.Perguntas.Descricao) ||
-                !string.IsNullOrEmpty(quizCommand.Perguntas.Alternativas.Titulo))
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+                foreach (var item2 in item.Alternativas)
+                {
+                    if (string.IsNullOrEmpty(quizCommand.Titulo) ||
+                        string.IsNullOrEmpty(item.Titulo) ||
+                        string.IsNullOrEmpty(item.Descricao) ||
+                        string.IsNullOrEmpty(item2.Titulo))
+                        return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+                }
+            }
 
             var quizes = CarregarData<QuizModel>();
-            quizCommand.CodigoQuiz = quizes.Select(u => u.CodigoQuiz).ToList().Max() + 1;
+            quizCommand.CodigoQuiz = Guid.NewGuid();
+            perguntasCommand.CodigoPergunta = Guid.NewGuid();
+            alternativasCommand.CodigoAlternativa = Guid.NewGuid();
 
             var quiz = new QuizModel
             {
@@ -67,22 +77,23 @@ namespace FdevzQuiz.Controllers
                 Respostas = 0,
                 ImagemUrl = quizCommand.ImagemUrl,
                 Nivel = quizCommand.Nivel,
-                Perguntas = new PerguntasModel
-                {
-                    CodigoQuiz = quizCommand.CodigoQuiz,
-                    Titulo = quizCommand.Perguntas.Titulo,
-                    Descricao = quizCommand.Perguntas.Descricao,
-                    Alternativas = new AlternativasModel
-                    {
-                        CodigoQuiz = quizCommand.CodigoQuiz,
-                        Titulo = quizCommand.Perguntas.Alternativas.Titulo,
-                        Correta = quizCommand.Perguntas.Alternativas.Correta
-                    }
-                }
+                //perguntas = new perguntasmodel()
+                //{
+                //    codigopergunta = perguntascommand.codigopergunta,
+                //    codigoquiz = quizcommand.codigoquiz,
+                //    titulo = perguntascommand.titulo,
+                //    descricao = perguntascommand.descricao,
+                //    alternativas = new alternativasmodel()
+                //    {
+                //        codigoquiz = quizcommand.codigoquiz,
+                //        codigopergunta = perguntascommand.codigopergunta,
+                //        codigoalternativa = alternativascommand.codigoalternativa,
+                //        titulo = alternativascommand.titulo,
+                //        correta = alternativascommand.correta
+                //    }
+                //}
             };
 
-            quiz.Perguntas.CodigoPergunta = quizes.Select(u => u.Perguntas.CodigoPergunta).ToList().Max() + 1;
-            quiz.Perguntas.Alternativas.CodigoAlternativa = quizes.Select(u => u.Perguntas.Alternativas.CodigoAlternativa).ToList().Max() + 1;
             quizes.Add(quiz);
 
             await SalvarDados(quizes);
@@ -91,7 +102,7 @@ namespace FdevzQuiz.Controllers
         }
 
         [HttpPut("alterarQuiz")]
-        public async Task<ActionResult<QuizModel>> AlterarQuiz([FromBody] QuizCommand quizCommand)
+        public async Task<ActionResult<QuizModel>> AlterarQuiz([FromBody] QuizCommand quizCommand, [FromBody] PerguntasCommand perguntasCommand, [FromBody] AlternativasCommand alternativasCommand)
         {
             if (!ModelState.IsValid)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
@@ -99,40 +110,67 @@ namespace FdevzQuiz.Controllers
             if (quizCommand == null)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-            if (quizCommand.Perguntas.Alternativas.ToString().Length > 5)
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas são 4!");
+            foreach (var item in quizCommand.Perguntas)
+            {
+                if (item.Alternativas.Count > 4)
+                    return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
 
-            if (!string.IsNullOrEmpty(quizCommand.Titulo) ||
-                !string.IsNullOrEmpty(quizCommand.Perguntas.Titulo) ||
-                !string.IsNullOrEmpty(quizCommand.Perguntas.Descricao) ||
-                !string.IsNullOrEmpty(quizCommand.Perguntas.Alternativas.Titulo))
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+                foreach (var item2 in item.Alternativas)
+                {
+                    if (string.IsNullOrEmpty(quizCommand.Titulo) ||
+                        string.IsNullOrEmpty(item.Titulo) ||
+                        string.IsNullOrEmpty(item.Descricao) ||
+                        string.IsNullOrEmpty(item2.Titulo))
+                        return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a alteração de dados!");
+                }
+            }
 
-            var quizes = CarregarData<QuizModel>();
-            var quiz = quizes.Where(u => u.CodigoQuiz == quizCommand.CodigoQuiz).FirstOrDefault();
+            var quizesQuiz = CarregarData<QuizModel>();
+            var quizesPergunta = CarregarData<PerguntasModel>();
+            var quizesAlternativa = CarregarData<AlternativasModel>();
+
+            var quiz = quizesQuiz
+                .Where(u => u.CodigoQuiz == quizCommand.CodigoQuiz)
+                .FirstOrDefault();
+
+            var quizPergunta = quizesPergunta
+                .Where(u => u.CodigoPergunta == perguntasCommand.CodigoPergunta && u.CodigoQuiz == quiz.CodigoQuiz)
+                .FirstOrDefault();
+
+            var quizAlternativa = quizesAlternativa
+                .Where(u => u.CodigoAlternativa == alternativasCommand.CodigoAlternativa && u.CodigoQuiz == quiz.CodigoQuiz && u.CodigoPergunta == quizPergunta.CodigoPergunta)
+                .FirstOrDefault();
 
             quiz.ImagemUrl = quizCommand.ImagemUrl;
             quiz.Nivel = quizCommand.Nivel;
             quiz.Titulo = quizCommand.Titulo;
             quiz.Respostas = quizCommand.Respostas;
-            quiz.Perguntas.Descricao = quizCommand.Perguntas.Descricao;
-            quiz.Perguntas.Titulo = quiz.Perguntas.Titulo;
-            quiz.Perguntas.Alternativas.Titulo = quizCommand.Perguntas.Alternativas.Titulo;
-            quiz.Perguntas.Alternativas.Correta = quizCommand.Perguntas.Alternativas.Correta;
-            quizes.Add(quiz);
 
-            await SalvarDados(quizes);
+            perguntasCommand.Descricao = perguntasCommand.Descricao;
+            perguntasCommand.Titulo = perguntasCommand.Titulo;
+
+            quizPergunta.Titulo = alternativasCommand.Titulo;
+            quizAlternativa.Correta = alternativasCommand.Correta;
+
+            quizesQuiz.Add(quiz);
+            quizesPergunta.Add(quizPergunta);
+            quizesAlternativa.Add(quizAlternativa);
+
+            await SalvarDados(quizesQuiz);
+            await SalvarDados(quizesPergunta);
+            await SalvarDados(quizesAlternativa);
 
             return NoContent();
         }
 
         [HttpDelete("excluirQuizz")]
-        public async Task<ActionResult> ExcluirUsuario([FromRoute] long id)
+        public async Task<ActionResult> ExcluirUsuario([FromRoute] Guid id)
         {
+            if (id == Guid.Empty)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Quiz não existente!");
+
             var quizes = CarregarData<QuizModel>();
             quizes = quizes
-                .Where(u => u.Perguntas.Alternativas.CodigoQuiz != id )
-                .Where(u => u.Perguntas.CodigoQuiz != id)
                 .Where(u => u.CodigoQuiz != id)
                 .ToList();
 

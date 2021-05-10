@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace FdevzQuiz.Models
+namespace FdevzQuiz.Command
 {
-    public class AlternativasModel
+    public class AlternativasCommand
     {
         public Guid CodigoAlternativa { get; set; }
         public Guid CodigoQuiz { get; set; }
