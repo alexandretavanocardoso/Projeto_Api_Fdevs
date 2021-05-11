@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace FdevzQuiz.Models
 {
@@ -9,6 +8,5 @@ namespace FdevzQuiz.Models
         public Guid CodigoQuiz { get; set; }
         public string Titulo { get; set; }
         public string Descricao { get; set; }
-        public ICollection<AlternativasModel> Alternativas { get; set; }
     }
 }

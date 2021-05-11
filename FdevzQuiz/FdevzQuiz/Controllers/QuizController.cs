@@ -15,18 +15,18 @@ namespace FdevzQuiz.Controllers
     [ApiController]
     public class QuizController : ControllerBase
     {
-        private ICollection<T> CarregarData<T>()
+        private ICollection<T> CarregarData<T>(string path)
         {
-            using var openStream = System.IO.File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Quiz.json"));
+            using var openStream = System.IO.File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", $"{path}.json"));
             return JsonSerializer.DeserializeAsync<ICollection<T>>(openStream, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             }).Result;
         }
 
-        private async Task<ICollection<T>> SalvarDados<T>(ICollection<T> dados)
+        private async Task<ICollection<T>> SalvarDados<T>(ICollection<T> dados, string path)
         {
-            using var createStream = System.IO.File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Quiz.json"));
+            using var createStream = System.IO.File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", $"{path}.json"));
             await JsonSerializer.SerializeAsync(createStream, dados, new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -36,14 +36,28 @@ namespace FdevzQuiz.Controllers
         }
 
         [HttpGet("recuperarQuiz")]
-        public ActionResult<ICollection<dynamic>> Quizzes()
+        public ActionResult<ICollection<QuizModel>> RecuperarQuiz()
         {
-            var quizzes = CarregarData<dynamic>();
-            return Ok(quizzes);
+            var quiz = CarregarData<QuizModel>("Quiz");
+            return Ok(quiz);
+        }
+
+        [HttpGet("recuperarPergunta")]
+        public ActionResult<ICollection<QuizModel>> RecuperarPergunta()
+        {
+            var Pergunta = CarregarData<PerguntasModel>("Perguntas");
+            return Ok(Pergunta);
+        }
+
+        [HttpGet("recuperarAlternativa")]
+        public ActionResult<ICollection<AlternativasModel>> RecuperarAlternativa()
+        {
+            var alternativa = CarregarData<AlternativasModel>("Alternativas");
+            return Ok(alternativa);
         }
 
         [HttpPost("adicionarQuiz")]
-        public async Task<ActionResult<QuizModel>> AdicionarQuiz([FromBody] QuizCommand quizCommand, [FromBody] PerguntasCommand perguntasCommand, [FromBody] AlternativasCommand alternativasCommand)
+        public async Task<ActionResult<QuizModel>> AdicionarQuiz([FromBody] QuizCommand quizCommand)
         {
             if (!ModelState.IsValid)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
@@ -51,130 +65,235 @@ namespace FdevzQuiz.Controllers
             if (quizCommand == null)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-            foreach (var item in quizCommand.Perguntas)
-            {
-                if (item.Alternativas.Count > 4)
-                    return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+            if (string.IsNullOrEmpty(quizCommand.Titulo) || string.IsNullOrEmpty(quizCommand.Nivel))
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-                foreach (var item2 in item.Alternativas)
-                {
-                    if (string.IsNullOrEmpty(quizCommand.Titulo) ||
-                        string.IsNullOrEmpty(item.Titulo) ||
-                        string.IsNullOrEmpty(item.Descricao) ||
-                        string.IsNullOrEmpty(item2.Titulo))
-                        return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
-                }
-            }
-
-            var quizes = CarregarData<QuizModel>();
-            quizCommand.CodigoQuiz = Guid.NewGuid();
-            perguntasCommand.CodigoPergunta = Guid.NewGuid();
-            alternativasCommand.CodigoAlternativa = Guid.NewGuid();
+            var quizes = CarregarData<QuizModel>("Quiz");
 
             var quiz = new QuizModel
             {
+                CodigoQuiz = Guid.NewGuid(),
                 Titulo = quizCommand.Titulo,
                 Respostas = 0,
                 ImagemUrl = quizCommand.ImagemUrl,
-                Nivel = quizCommand.Nivel,
-                //perguntas = new perguntasmodel()
-                //{
-                //    codigopergunta = perguntascommand.codigopergunta,
-                //    codigoquiz = quizcommand.codigoquiz,
-                //    titulo = perguntascommand.titulo,
-                //    descricao = perguntascommand.descricao,
-                //    alternativas = new alternativasmodel()
-                //    {
-                //        codigoquiz = quizcommand.codigoquiz,
-                //        codigopergunta = perguntascommand.codigopergunta,
-                //        codigoalternativa = alternativascommand.codigoalternativa,
-                //        titulo = alternativascommand.titulo,
-                //        correta = alternativascommand.correta
-                //    }
-                //}
+                Nivel = quizCommand.Nivel
             };
 
             quizes.Add(quiz);
 
-            await SalvarDados(quizes);
+            await SalvarDados(quizes, "Quiz");
 
             return Created("quizz/{id}", quizes);
         }
 
-        [HttpPut("alterarQuiz")]
-        public async Task<ActionResult<QuizModel>> AlterarQuiz([FromBody] QuizCommand quizCommand, [FromBody] PerguntasCommand perguntasCommand, [FromBody] AlternativasCommand alternativasCommand)
+        [HttpPost("adicionarPergunta")]
+        public async Task<ActionResult<PerguntasModel>> AdicionarPergunta([FromBody] PerguntasCommand perguntasCommand)
         {
             if (!ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
+
+            if (perguntasCommand == null)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+
+            if (string.IsNullOrEmpty(perguntasCommand.Titulo) || string.IsNullOrEmpty(perguntasCommand.Descricao))
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+
+
+            var perguntas = CarregarData<PerguntasModel>("Perguntas");
+
+            var pergunta = new PerguntasModel
+            {
+                CodigoQuiz = perguntasCommand.CodigoQuiz,
+                CodigoPergunta = Guid.NewGuid(),
+                Titulo = perguntasCommand.Titulo,
+                Descricao = perguntasCommand.Descricao
+            };
+
+            perguntas.Add(pergunta);
+
+            await SalvarDados(perguntas, "Perguntas");
+
+            return Created("perguntas/{id}", perguntas);
+        }
+
+        [HttpPost("adicionarAlternativa")]
+        public async Task<ActionResult<AlternativasModel>> AdicionarAlternativa([FromBody] List<AlternativasCommand> alternativasCommand)
+        {
+            if (!ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
+
+            if (alternativasCommand == null)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+
+            foreach (var item in alternativasCommand)
+            {
+                if (string.IsNullOrEmpty(item.Titulo))
+                    return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+            }
+
+            if (alternativasCommand.Count > 4)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo 4 alternativas!");
+
+            var alternativas = CarregarData<AlternativasModel>("Alternativas");
+
+            foreach (var item in alternativasCommand)
+            {
+                var alternativa = new AlternativasModel
+                {
+                    CodigoAlternativa = Guid.NewGuid(),
+                    CodigoQuiz = item.CodigoQuiz,
+                    CodigoPergunta = item.CodigoPergunta,
+                    Titulo = item.Titulo,
+                    Correta = item.Correta
+                };
+
+                alternativas.Add(alternativa);
+
+                await SalvarDados(alternativas, "Perguntas");
+            }
+
+            return Created("alternativas/{id}", alternativas);
+        }
+
+        [HttpPut("alterarQuiz")]
+        public async Task<ActionResult<QuizModel>> AlterarQuiz([FromBody] QuizCommand quizCommand)
+        {
+            if (!ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
 
             if (quizCommand == null)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-            foreach (var item in quizCommand.Perguntas)
-            {
-                if (item.Alternativas.Count > 4)
-                    return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
+            if (string.IsNullOrEmpty(quizCommand.Titulo) || string.IsNullOrEmpty(quizCommand.Nivel))
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
 
-                foreach (var item2 in item.Alternativas)
-                {
-                    if (string.IsNullOrEmpty(quizCommand.Titulo) ||
-                        string.IsNullOrEmpty(item.Titulo) ||
-                        string.IsNullOrEmpty(item.Descricao) ||
-                        string.IsNullOrEmpty(item2.Titulo))
-                        return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a alteração de dados!");
-                }
-            }
+            var quizes = CarregarData<QuizModel>("Quiz");
+            var quiz = quizes.Where(u => u.CodigoQuiz == quizCommand.CodigoQuiz).FirstOrDefault();
 
-            var quizesQuiz = CarregarData<QuizModel>();
-            var quizesPergunta = CarregarData<PerguntasModel>();
-            var quizesAlternativa = CarregarData<AlternativasModel>();
+            if (quiz == null)
+                throw new Exception("Quiz não existe!");
 
-            var quiz = quizesQuiz
-                .Where(u => u.CodigoQuiz == quizCommand.CodigoQuiz)
-                .FirstOrDefault();
-
-            var quizPergunta = quizesPergunta
-                .Where(u => u.CodigoPergunta == perguntasCommand.CodigoPergunta && u.CodigoQuiz == quiz.CodigoQuiz)
-                .FirstOrDefault();
-
-            var quizAlternativa = quizesAlternativa
-                .Where(u => u.CodigoAlternativa == alternativasCommand.CodigoAlternativa && u.CodigoQuiz == quiz.CodigoQuiz && u.CodigoPergunta == quizPergunta.CodigoPergunta)
-                .FirstOrDefault();
-
+            quiz.CodigoQuiz = quizCommand.CodigoQuiz;
             quiz.ImagemUrl = quizCommand.ImagemUrl;
             quiz.Nivel = quizCommand.Nivel;
-            quiz.Titulo = quizCommand.Titulo;
             quiz.Respostas = quizCommand.Respostas;
+            quiz.Titulo = quizCommand.Titulo;
+            quizes.Add(quiz);
 
-            perguntasCommand.Descricao = perguntasCommand.Descricao;
-            perguntasCommand.Titulo = perguntasCommand.Titulo;
-
-            quizPergunta.Titulo = alternativasCommand.Titulo;
-            quizAlternativa.Correta = alternativasCommand.Correta;
-
-            quizesQuiz.Add(quiz);
-            quizesPergunta.Add(quizPergunta);
-            quizesAlternativa.Add(quizAlternativa);
-
-            await SalvarDados(quizesQuiz);
-            await SalvarDados(quizesPergunta);
-            await SalvarDados(quizesAlternativa);
+            await SalvarDados(quizes, "Quiz");
 
             return NoContent();
         }
 
-        [HttpDelete("excluirQuizz")]
-        public async Task<ActionResult> ExcluirUsuario([FromRoute] Guid id)
+        [HttpPut("alterarPergunta")]
+        public async Task<ActionResult<PerguntasModel>> AlterarPergunta([FromBody] PerguntasCommand perguntasCommand)
+        {
+            if (!ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
+
+            if (perguntasCommand == null)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+
+            if (string.IsNullOrEmpty(perguntasCommand.Titulo) || string.IsNullOrEmpty(perguntasCommand.Descricao))
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+
+
+            var perguntas = CarregarData<PerguntasModel>("Perguntas");
+            var pergunta = perguntas.Where(u => u.CodigoPergunta == perguntasCommand.CodigoPergunta && u.CodigoQuiz == perguntasCommand.CodigoQuiz).FirstOrDefault();
+
+            if (pergunta == null)
+                throw new Exception("Quiz não existe!");
+
+            pergunta.Descricao = perguntasCommand.Descricao;
+            pergunta.Titulo = perguntasCommand.Titulo;
+            perguntas.Add(pergunta);
+
+            await SalvarDados(perguntas, "Quiz");
+
+            return NoContent();
+        }
+
+        [HttpPut("alterarAlternativa")]
+        public async Task<ActionResult<AlternativasModel>> AlterarAlternativa([FromBody] List<AlternativasCommand> alternativasCommand)
+        {
+            if (!ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo de alternativas é 4!");
+
+            if (alternativasCommand == null)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+
+            foreach (var item in alternativasCommand)
+            {
+                if (string.IsNullOrEmpty(item.Titulo))
+                    return StatusCode((int)HttpStatusCode.InternalServerError, "Falta Dados para fazer a inserção de dados!");
+            }
+
+            if (alternativasCommand.Count > 4)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Máximo 4 alternativas!");
+
+            var alternativas = CarregarData<AlternativasModel>("Alternativas");
+
+            foreach (var item in alternativasCommand)
+            {
+                var alternativa = alternativas.Where(u => u.CodigoAlternativa == item.CodigoAlternativa && u.CodigoPergunta == item.CodigoPergunta && u.CodigoQuiz == item.CodigoQuiz).FirstOrDefault();
+
+                alternativa.Correta = item.Correta;
+                alternativa.Titulo = item.Titulo;
+                alternativas.Add(alternativa);
+
+                await SalvarDados(alternativas, "Quiz");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("excluirAlternativa")]
+        public async Task<ActionResult> ExcluirAlternativa([FromBody] List<Guid> id)
+        {
+            foreach (var item in id)
+            {
+                if (item == Guid.Empty)
+                    return StatusCode((int)HttpStatusCode.InternalServerError, "Alternativas não existente!");
+
+                var alternativas = CarregarData<AlternativasModel>("Alternativas");
+                alternativas = alternativas
+                    .Where(u => u.CodigoAlternativa != item)
+                    .ToList();
+
+                await SalvarDados(alternativas, "Alternativas");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("excluirPergunta")]
+        public async Task<ActionResult> ExcluirPergunta([FromBody] Guid id)
         {
             if (id == Guid.Empty)
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Quiz não existente!");
 
-            var quizes = CarregarData<QuizModel>();
-            quizes = quizes
+            var perguntas = CarregarData<PerguntasModel>("Perguntas");
+            perguntas = perguntas
+                .Where(u => u.CodigoPergunta != id)
+                .ToList();
+
+            await SalvarDados(perguntas, "Perguntas");
+
+            return NoContent();
+        }
+
+        [HttpDelete("excluirQuiz")]
+        public async Task<ActionResult> ExcluirQuiz([FromBody] Guid id)
+        {
+            if (id == Guid.Empty)
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Quiz não existente!");
+
+            var quiz = CarregarData<QuizModel>("Quiz");
+            quiz = quiz
                 .Where(u => u.CodigoQuiz != id)
                 .ToList();
 
-            await SalvarDados(quizes);
+            await SalvarDados(quiz, "Quiz");
 
             return NoContent();
         }
